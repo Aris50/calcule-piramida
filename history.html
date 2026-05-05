@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Istoric · Calcule Piramide</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+</head>
+<body>
+  <header class="topbar"></header>
+  <main>
+    <div class="card">
+      <h2>Istoricul meu</h2>
+      <div id="status" class="muted">Se încarcă...</div>
+      <div id="history-list" class="history-list"></div>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modal-title">Detalii exercițiu</h3>
+        <button class="secondary" id="modal-close">Închide</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script type="module" src="js/history.js"></script>
+</body>
+</html>

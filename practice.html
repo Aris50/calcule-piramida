@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exercițiu · Calcule Piramide</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+</head>
+<body>
+  <header class="topbar"></header>
+  <main>
+    <div class="card">
+      <div class="controls">
+        <label for="type-select">Tip piramidă:</label>
+        <select id="type-select">
+          <option value="mixt">Mixt (toate trei tipurile)</option>
+          <option value="triunghiulara">Triunghiulară regulată</option>
+          <option value="patrulatera">Patrulateră regulată</option>
+          <option value="hexagonala">Hexagonală regulată</option>
+        </select>
+        <button id="generate-btn">Generează exercițiu nou</button>
+        <span class="spacer" style="flex:1"></span>
+        <button id="check-btn" class="secondary">Verifică</button>
+        <button id="submit-btn" disabled>Trimite</button>
+      </div>
+
+      <details class="tutorial">
+        <summary>Cum scriu radicalii? (clic pentru ajutor)</summary>
+        <p style="margin: 8px 0 4px;">Tastează răspunsurile așa:</p>
+        <ul style="margin: 4px 0; padding-left: 18px;">
+          <li>Întreg: <code>5</code></li>
+          <li>Radical: <code>2rad3</code> = 2√3, <code>rad7</code> = √7</li>
+          <li>Sumă: <code>72+36rad3</code> = 72 + 36√3</li>
+          <li>Diferență: <code>5-2rad3</code> = 5 − 2√3</li>
+        </ul>
+        <p class="muted" style="margin: 4px 0 0;">Sub fiecare casetă vezi cum se interpretează ce ai scris. Dacă apare „—", expresia nu e validă.</p>
+      </details>
+
+      <div id="status" class="muted" style="margin-bottom:12px"></div>
+
+      <div style="overflow-x:auto">
+        <table class="problem-table" id="problem-table"></table>
+      </div>
+
+      <div class="legend">
+        <span><span class="key" style="background:var(--given);border:1px solid var(--given-border)"></span>Valori date</span>
+        <span><span class="key" style="background:var(--good-bg);border:1px solid var(--good)"></span>Corect</span>
+        <span><span class="key" style="background:var(--bad-bg);border:1px solid var(--bad)"></span>Greșit</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script type="module" src="js/practice.js"></script>
+</body>
+</html>

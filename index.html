@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Autentificare · Calcule Piramide</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main>
+    <div class="login-wrap">
+      <h1>📐 Calcule · Piramide</h1>
+      <div class="card">
+        <h2>Autentificare</h2>
+        <div id="msg"></div>
+        <form id="login-form">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" required autocomplete="username" />
+          </div>
+          <div class="field">
+            <label for="password">Parolă</label>
+            <input type="password" id="password" required autocomplete="current-password" />
+          </div>
+          <button type="submit" id="submit-btn" style="width:100%">Intră în cont</button>
+        </form>
+        <p class="muted" style="margin-top:16px;text-align:center">
+          Nu ai cont? Cere-i profesorului tău să-ți creeze unul.
+        </p>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

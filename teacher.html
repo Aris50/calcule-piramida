@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Elevii mei · Calcule Piramide</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+</head>
+<body>
+  <header class="topbar"></header>
+  <main>
+    <div class="card">
+      <h2>Elevii mei</h2>
+      <div class="controls">
+        <label for="class-filter">Clasa:</label>
+        <select id="class-filter"><option value="">Toate clasele</option></select>
+        <span class="spacer" style="flex:1"></span>
+        <button id="export-btn" class="secondary">Export CSV</button>
+      </div>
+      <div id="status" class="muted">Se încarcă...</div>
+      <div style="overflow-x:auto;margin-top:12px">
+        <table class="teacher-table" id="students-table"></table>
+      </div>
+    </div>
+
+    <div class="card" id="submissions-card" style="display:none">
+      <h2 id="submissions-title">Trimiteri</h2>
+      <div id="submissions-status" class="muted"></div>
+      <div class="history-list" id="submissions-list"></div>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modal-title">Detalii exercițiu</h3>
+        <button class="secondary" id="modal-close">Închide</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" defer></script>
+  <script type="module" src="js/teacher.js"></script>
+</body>
+</html>

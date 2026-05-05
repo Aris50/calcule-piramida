@@ -1,0 +1,15 @@
+{
+  "name": "calcule-piramida",
+  "version": "1.0.0",
+  "description": "Generator de exerciții cu piramide regulate + portal pentru elevi.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tools/test-math.mjs",
+    "add-student": "node tools/add-student.mjs",
+    "serve": "node -e \"require('http').createServer((req,res)=>{const fs=require('fs');const p=require('path');let f=req.url.split('?')[0];if(f==='/')f='/index.html';const file=p.join(process.cwd(),f);fs.readFile(file,(e,d)=>{if(e){res.writeHead(404);res.end('not found');return;}const ct={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json'}[p.extname(f)]||'text/plain';res.writeHead(200,{'Content-Type':ct});res.end(d);});}).listen(8080,()=>console.log('http://localhost:8080'))\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
