@@ -85,7 +85,6 @@ function render() {
     for (const v of COLUMNS) {
       const isGiven = row.given.includes(v);
       const cellId = `cell-${ri}-${v}`;
-      const previewId = `prev-${ri}-${v}`;
       if (isGiven) {
         const tex = row.values[v].toLatex();
         html += `<td class="given"><span class="katex-target" data-tex="${escapeAttr(tex)}"></span></td>`;
@@ -96,9 +95,10 @@ function render() {
           if (st.parsed && st.parsed.equals(row.values[v])) cls += ' right';
           else cls += ' wrong';
         }
+        const dispId = `disp-${ri}-${v}`;
         html += `<td class="${cls}">
+          <span id="${dispId}" class="display empty">scrie aici</span>
           <input type="text" id="${cellId}" data-row="${ri}" data-var="${v}" value="${escapeAttr(st.text)}" autocomplete="off" spellcheck="false" />
-          <div id="${previewId}" class="preview"></div>
         </td>`;
       }
     }
@@ -115,10 +115,19 @@ function render() {
     } catch (_) { el.textContent = tex; }
   }
 
-  // Hook up input handlers + render any existing previews
+  // Hook up input handlers + render initial display contents
   for (const inp of document.querySelectorAll('.problem-table input')) {
     inp.addEventListener('input', onInput);
-    onInput.call(inp); // initial preview render
+    inp.addEventListener('keydown', onKeydown);
+    refreshDisplay(inp);
+  }
+  // Click anywhere in a cell focuses its input (the display is then hidden
+  // by the :focus-within CSS rule).
+  for (const td of document.querySelectorAll('.problem-table td.input-cell')) {
+    td.addEventListener('click', () => {
+      const inp = td.querySelector('input');
+      if (inp) inp.focus();
+    });
   }
 }
 
@@ -126,26 +135,41 @@ function onInput() {
   const ri = parseInt(this.dataset.row, 10);
   const v = this.dataset.var;
   const text = this.value;
-  const previewEl = document.getElementById(`prev-${ri}-${v}`);
   let parsed = null, error = null;
-  if (text.trim() === '') {
-    previewEl.textContent = '';
-  } else {
-    try {
-      parsed = parseAnswer(text);
-      previewEl.innerHTML = '';
-      const span = document.createElement('span');
-      window.katex.render(parsed.toLatex(), span, { throwOnError: false });
-      previewEl.appendChild(span);
-    } catch (e) {
-      error = e.message;
-      previewEl.textContent = '—';
-    }
+  if (text.trim() !== '') {
+    try { parsed = parseAnswer(text); }
+    catch (e) { error = e.message; }
   }
   inputState[ri][v] = { text, parsed, error };
+  refreshDisplay(this);
   // If previously scored, clear the highlight while editing
   if (scored) {
     this.parentElement.classList.remove('right', 'wrong');
+  }
+}
+
+function onKeydown(e) {
+  if (e.key === 'Enter') { e.preventDefault(); this.blur(); }
+}
+
+function refreshDisplay(input) {
+  const ri = parseInt(input.dataset.row, 10);
+  const v = input.dataset.var;
+  const dispEl = document.getElementById(`disp-${ri}-${v}`);
+  if (!dispEl) return;
+  const st = inputState[ri][v] || { text: '', parsed: null, error: null };
+  dispEl.classList.remove('empty', 'invalid');
+  if (st.text.trim() === '') {
+    dispEl.classList.add('empty');
+    dispEl.textContent = 'scrie aici';
+  } else if (st.parsed) {
+    dispEl.innerHTML = '';
+    try {
+      window.katex.render(st.parsed.toLatex(), dispEl, { throwOnError: false });
+    } catch (_) { dispEl.textContent = st.text; }
+  } else {
+    dispEl.classList.add('invalid');
+    dispEl.textContent = st.text;
   }
 }
 
