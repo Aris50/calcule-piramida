@@ -95,10 +95,9 @@ function render() {
           if (st.parsed && st.parsed.equals(row.values[v])) cls += ' right';
           else cls += ' wrong';
         }
-        const dispId = `disp-${ri}-${v}`;
         html += `<td class="${cls}">
-          <span id="${dispId}" class="display empty">scrie aici</span>
           <input type="text" id="${cellId}" data-row="${ri}" data-var="${v}" value="${escapeAttr(st.text)}" autocomplete="off" spellcheck="false" />
+          <span class="display"></span>
         </td>`;
       }
     }
@@ -115,18 +114,20 @@ function render() {
     } catch (_) { el.textContent = tex; }
   }
 
-  // Hook up input handlers + render initial display contents
+  // Hook up handlers + initialise display state for any pre-filled inputs
   for (const inp of document.querySelectorAll('.problem-table input')) {
     inp.addEventListener('input', onInput);
     inp.addEventListener('keydown', onKeydown);
-    refreshDisplay(inp);
+    refreshCell(inp);
   }
-  // Click anywhere in a cell focuses its input (the display is then hidden
-  // by the :focus-within CSS rule).
+  // Clicking anywhere in a cell focuses its input.
   for (const td of document.querySelectorAll('.problem-table td.input-cell')) {
     td.addEventListener('click', () => {
       const inp = td.querySelector('input');
-      if (inp) inp.focus();
+      if (inp && document.activeElement !== inp) {
+        inp.focus();
+        inp.setSelectionRange(inp.value.length, inp.value.length);
+      }
     });
   }
 }
@@ -141,35 +142,34 @@ function onInput() {
     catch (e) { error = e.message; }
   }
   inputState[ri][v] = { text, parsed, error };
-  refreshDisplay(this);
-  // If previously scored, clear the highlight while editing
-  if (scored) {
-    this.parentElement.classList.remove('right', 'wrong');
-  }
+  refreshCell(this);
+  // Clear scored highlight while editing
+  if (scored) this.parentElement.classList.remove('right', 'wrong');
 }
 
 function onKeydown(e) {
   if (e.key === 'Enter') { e.preventDefault(); this.blur(); }
 }
 
-function refreshDisplay(input) {
+// Updates the rendered "display" element and toggles `.has-render` on the
+// td. The CSS uses `.has-render:not(:focus-within)` to swap the visible
+// element, so this function does NOT itself decide what's shown — it only
+// keeps the rendered content fresh and tells CSS whether a render exists.
+function refreshCell(input) {
   const ri = parseInt(input.dataset.row, 10);
   const v = input.dataset.var;
-  const dispEl = document.getElementById(`disp-${ri}-${v}`);
-  if (!dispEl) return;
+  const td = input.parentElement;
+  const dispEl = td.querySelector('.display');
   const st = inputState[ri][v] || { text: '', parsed: null, error: null };
-  dispEl.classList.remove('empty', 'invalid');
-  if (st.text.trim() === '') {
-    dispEl.classList.add('empty');
-    dispEl.textContent = 'scrie aici';
-  } else if (st.parsed) {
+  if (st.parsed) {
     dispEl.innerHTML = '';
     try {
       window.katex.render(st.parsed.toLatex(), dispEl, { throwOnError: false });
     } catch (_) { dispEl.textContent = st.text; }
+    td.classList.add('has-render');
   } else {
-    dispEl.classList.add('invalid');
-    dispEl.textContent = st.text;
+    dispEl.innerHTML = '';
+    td.classList.remove('has-render');
   }
 }
 

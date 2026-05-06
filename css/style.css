@@ -218,32 +218,19 @@ label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
 }
 .problem-table td.right { background: var(--good-bg); }
 .problem-table td.wrong { background: var(--bad-bg); }
-/* Click-to-edit cell:
-   default = render the parsed math (or a hint).
-   focused = the cell becomes a text input.                                */
+/* Cell shows the input by default. Once the student writes a valid value
+   and leaves the cell, the input is visually replaced by the rendered
+   math. Clicking the cell brings the input back. The input always stays
+   focusable (Tab works) — when "hidden" it is shrunk to 1px so it can
+   still receive focus.                                                    */
 .problem-table td.input-cell {
   padding: 2px;
-  cursor: text;
   position: relative;
   min-height: 32px;
-}
-.problem-table td.input-cell .display {
-  display: block;
-  padding: 6px 4px;
-  min-height: 20px;
-  user-select: none;
-}
-.problem-table td.input-cell .display.empty {
-  color: var(--muted);
-  font-style: italic;
-  font-size: 11px;
-}
-.problem-table td.input-cell .display.invalid {
-  color: var(--bad);
-  font-weight: 500;
+  cursor: text;
 }
 .problem-table td.input-cell input {
-  display: none;
+  display: block;
   width: 100%;
   border: 1px solid transparent;
   background: transparent;
@@ -252,11 +239,27 @@ label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
   font-size: 13px;
   text-align: center;
 }
-.problem-table td.input-cell:focus-within .display { display: none; }
-.problem-table td.input-cell:focus-within input {
-  display: block;
+.problem-table td.input-cell input:focus {
   border-color: var(--accent);
   background: #fff;
+  outline: none;
+}
+.problem-table td.input-cell .display {
+  display: none;
+  padding: 6px 4px;
+  user-select: none;
+  pointer-events: none;
+}
+.problem-table td.input-cell.has-render:not(:focus-within) input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  padding: 0;
+  border: 0;
+}
+.problem-table td.input-cell.has-render:not(:focus-within) .display {
+  display: block;
 }
 
 /* Score badge */
