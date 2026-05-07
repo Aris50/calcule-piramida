@@ -2,7 +2,7 @@
 
 O aplicație web pentru exersarea piramidelor regulate la geometrie — gândită pentru elevii de gimnaziu și liceu.
 
-🌐 **Live**: https://aris50.github.io/calcule-piramida/
+**Live**: https://aris50.github.io/calcule-piramida/
 
 ---
 

@@ -87,7 +87,7 @@ export function renderTopbar(profile, activePage) {
         { href: 'history.html', label: 'Istoric', key: 'history' },
       ];
   topbar.innerHTML = `
-    <h1><a href="${homeHref}" style="color:inherit;text-decoration:none">📐 Calcule · Piramide</a></h1>
+    <h1><a href="${homeHref}" style="color:inherit;text-decoration:none">Calcule · Piramide</a></h1>
     <nav>
       ${navItems.map((it) => `<a href="${it.href}" class="${it.key === activePage ? 'active' : ''}">${it.label}</a>`).join('')}
     </nav>
