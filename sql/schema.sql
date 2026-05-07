@@ -26,13 +26,18 @@ create table if not exists public.profiles (
 create table if not exists public.submissions (
   id             uuid primary key default gen_random_uuid(),
   student_id     uuid not null references public.profiles(id) on delete cascade,
-  pyramid_type   text not null,
+  module         text not null default 'piramide',  -- 'piramide' | 'aritmetica' | ...
+  pyramid_type   text,                              -- only meaningful for module='piramide'
   problem        jsonb not null,
   answers        jsonb not null,
   score_correct  integer not null,
   score_total    integer not null,
   created_at     timestamptz default now()
 );
+
+-- Migration 001 (idempotent), in case schema.sql is re-applied to an existing DB.
+alter table public.submissions add column if not exists module text not null default 'piramide';
+alter table public.submissions alter column pyramid_type drop not null;
 
 create index if not exists submissions_student_id_idx
   on public.submissions(student_id, created_at desc);

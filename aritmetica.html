@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aritmetică · Calcule Piramide</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar"></header>
+  <main>
+    <div class="card">
+      <h2>Aritmetică · 25 de exerciții</h2>
+
+      <div class="settings-grid">
+        <div class="setting">
+          <label>Operații</label>
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="op-add" checked> +</label>
+            <label><input type="checkbox" id="op-sub" checked> −</label>
+            <label><input type="checkbox" id="op-mul" checked> ×</label>
+            <label><input type="checkbox" id="op-div" checked> :</label>
+          </div>
+        </div>
+        <div class="setting">
+          <label>Paranteze</label>
+          <div class="checkbox-row">
+            <label><input type="radio" name="paren" value="none"> fără</label>
+            <label><input type="radio" name="paren" value="round" checked> ( )</label>
+            <label><input type="radio" name="paren" value="mixed"> ( ) și [ ]</label>
+          </div>
+        </div>
+        <div class="setting">
+          <label for="complexity">Operații per exercițiu</label>
+          <input type="number" id="complexity" min="1" max="6" value="3" />
+        </div>
+        <div class="setting">
+          <label for="max-num">Numere până la</label>
+          <input type="number" id="max-num" min="2" max="100" value="20" />
+        </div>
+        <div class="setting">
+          <label>Numere negative</label>
+          <div class="checkbox-row">
+            <label><input type="checkbox" id="allow-neg" checked> permise</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls" style="margin-top:16px">
+        <button id="generate-btn">Generează 25 exerciții noi</button>
+        <span class="spacer" style="flex:1"></span>
+        <button id="check-btn" class="secondary">Verifică</button>
+        <button id="submit-btn" disabled>Trimite</button>
+      </div>
+
+      <div id="status" class="muted" style="margin-top:12px"></div>
+
+      <div id="exercises-wrap" style="margin-top:16px">
+        <table class="problem-table arith-table" id="exercises-table"></table>
+      </div>
+
+      <div class="legend" style="margin-top:8px">
+        <span><span class="key" style="background:var(--good-bg);border:1px solid var(--good)"></span>Corect</span>
+        <span><span class="key" style="background:var(--bad-bg);border:1px solid var(--bad)"></span>Greșit</span>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="js/aritmetica.js"></script>
+</body>
+</html>

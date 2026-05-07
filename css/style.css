@@ -374,6 +374,69 @@ label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
   vertical-align: middle;
 }
 
+/* Arithmetic module ------------------------------------------------------- */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 24px;
+}
+.setting label { display: block; font-weight: 500; font-size: 13px; margin-bottom: 4px; }
+.setting input[type=number] { width: 100%; }
+.checkbox-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.checkbox-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 14px;
+}
+.checkbox-row input { accent-color: var(--accent); }
+
+.arith-table {
+  font-size: 14px;
+}
+.arith-table thead th { background: var(--panel-2); }
+.arith-table .num-col { width: 36px; color: var(--muted); }
+.arith-table .expr-col {
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 14px;
+  text-align: left;
+  padding-left: 12px;
+}
+.arith-table .answer-col { width: 120px; }
+.arith-table .answer-col input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: center;
+}
+.arith-table .answer-col input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+.arith-table tbody tr.right .answer-col { background: var(--good-bg); }
+.arith-table tbody tr.wrong .answer-col { background: var(--bad-bg); }
+
+/* Two-column layout to keep the page reasonable on wide screens */
+.arith-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 720px) {
+  .arith-grid { grid-template-columns: 1fr 1fr; }
+}
+
 @media print {
   header.topbar, .controls, .actions, button { display: none !important; }
   body { background: #fff; }

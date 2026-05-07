@@ -228,6 +228,7 @@ async function submit() {
       .from('submissions')
       .insert({
         student_id: profile.id,
+        module: 'piramide',
         pyramid_type,
         problem,
         answers,

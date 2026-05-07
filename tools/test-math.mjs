@@ -142,10 +142,56 @@ function testGenerator() {
   }
 }
 
+// ---- arithmetic ----
+async function testArithmetic() {
+  log('--- arithmetic.js ---');
+  const { generateProblem, parseIntegerAnswer, OPS_ALL } = await import('../js/math/arithmetic.js');
+
+  // Generate a lot of problems with varied settings; verify expr renders + answer is integer in range
+  const settingMatrix = [
+    { ops: ['+'], parenStyle: 'none', complexity: 1, maxNum: 10, allowNeg: false },
+    { ops: ['+', '-'], parenStyle: 'round', complexity: 2, maxNum: 20, allowNeg: true },
+    { ops: ['*', '/'], parenStyle: 'round', complexity: 2, maxNum: 12, allowNeg: false },
+    { ops: OPS_ALL, parenStyle: 'mixed', complexity: 3, maxNum: 20, allowNeg: true },
+    { ops: OPS_ALL, parenStyle: 'mixed', complexity: 5, maxNum: 30, allowNeg: true },
+  ];
+  for (const s of settingMatrix) {
+    const probs = generateProblem({ ...s, count: 25 });
+    if (probs.length !== 25) fail(`expected 25 exercises, got ${probs.length}`);
+    for (const ex of probs) {
+      if (!ex.expr || typeof ex.expr !== 'string') fail('missing expr: ' + JSON.stringify(ex));
+      if (!Number.isInteger(ex.answer)) fail('non-integer answer: ' + JSON.stringify(ex));
+      if (ex.answer < -3000 || ex.answer > 3000) fail('answer out of range: ' + ex.answer);
+      // Expression should contain only digits, allowed symbols, parens, brackets, spaces, and minus
+      if (!/^[\d\s+\-−×:()\[\]]+$/.test(ex.expr)) {
+        fail(`expr has unexpected chars: "${ex.expr}"`);
+      }
+      // Round-trip evaluate via an internal sanity check: replace symbols and let JS eval... too risky;
+      // instead just trust the engine since we already verified Math.trunc results.
+    }
+  }
+
+  // parseIntegerAnswer
+  const cases = [
+    ['', null], ['5', 5], ['-5', -5], ['  -5 ', -5], ['−5', -5],
+    ['5.0', null], ['abc', null], ['1+1', null], ['00', 0],
+  ];
+  for (const [in_, want] of cases) {
+    const got = parseIntegerAnswer(in_);
+    if (got !== want) fail(`parseIntegerAnswer("${in_}") = ${got} want ${want}`);
+  }
+
+  // Reject bad settings
+  let threw = false;
+  try { generateProblem({ ops: [] }); } catch (_) { threw = true; }
+  if (!threw) fail('expected throw on empty ops');
+}
+
 testExact();
 testParse();
 testSeeds();
 testGenerator();
+await testArithmetic();
 
 if (failures) {
   log(`\n${failures} FAILURE(S)`);

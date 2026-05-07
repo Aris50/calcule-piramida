@@ -3,7 +3,18 @@
 
 import { requireRole, renderTopbar } from './auth.js';
 import { getClient } from './supabase.js';
-import { renderReviewTable } from './review.js';
+import { renderReview } from './review.js';
+
+function moduleLabel(row) {
+  if (row.module === 'aritmetica') return 'Aritmetică';
+  // module='piramide' (default)
+  return ({
+    triunghiulara: 'Piramidă triunghiulară',
+    patrulatera:   'Piramidă patrulateră',
+    hexagonala:    'Piramidă hexagonală',
+    mixt:          'Piramide (mixt)',
+  })[row.pyramid_type] || 'Piramide';
+}
 
 let profile = null;
 
@@ -33,7 +44,7 @@ async function loadHistory() {
   const sb = getClient();
   const { data, error } = await sb
     .from('submissions')
-    .select('id, created_at, pyramid_type, score_correct, score_total')
+    .select('id, created_at, module, pyramid_type, score_correct, score_total')
     .eq('student_id', profile.id)
     .order('created_at', { ascending: false });
 
@@ -55,16 +66,10 @@ async function loadHistory() {
         hour: '2-digit', minute: '2-digit',
       });
       const pct = row.score_total ? Math.round((row.score_correct / row.score_total) * 100) : 0;
-      const typeLabel = {
-        triunghiulara: 'Triunghiulară',
-        patrulatera: 'Patrulateră',
-        hexagonala: 'Hexagonală',
-        mixt: 'Mixt',
-      }[row.pyramid_type] || row.pyramid_type;
       return `
         <div class="history-row">
           <div>
-            <strong>${escapeHtml(typeLabel)}</strong>
+            <strong>${escapeHtml(moduleLabel(row))}</strong>
             <span class="when"> · ${date}</span>
           </div>
           <span class="score-badge">${row.score_correct} / ${row.score_total}</span>
@@ -83,7 +88,7 @@ async function openDetails(id) {
   const sb = getClient();
   const { data, error } = await sb
     .from('submissions')
-    .select('id, created_at, pyramid_type, problem, answers, score_correct, score_total')
+    .select('id, created_at, module, pyramid_type, problem, answers, score_correct, score_total')
     .eq('id', id)
     .single();
 
@@ -93,9 +98,9 @@ async function openDetails(id) {
     body.innerHTML = `<div class="error">${escapeHtml(error.message)}</div>`;
   } else {
     const date = new Date(data.created_at).toLocaleString('ro-RO');
-    title.textContent = `Exercițiu · ${date} · ${data.score_correct}/${data.score_total}`;
+    title.textContent = `${moduleLabel(data)} · ${date} · ${data.score_correct}/${data.score_total}`;
     body.innerHTML = '';
-    body.appendChild(renderReviewTable(data.problem, data.answers));
+    body.appendChild(renderReview(data));
   }
   document.getElementById('modal').classList.add('open');
 }

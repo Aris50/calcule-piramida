@@ -79,11 +79,13 @@ export function renderTopbar(profile, activePage) {
   const navItems = isTeacher
     ? [
         { href: 'teacher.html', label: 'Elevii mei', key: 'teacher' },
-        { href: 'practice.html', label: 'Generator', key: 'practice' },
+        { href: 'practice.html', label: 'Piramide', key: 'practice' },
+        { href: 'aritmetica.html', label: 'Aritmetică', key: 'aritmetica' },
       ]
     : [
         { href: 'dashboard.html', label: 'Acasă', key: 'dashboard' },
-        { href: 'practice.html', label: 'Exercițiu', key: 'practice' },
+        { href: 'practice.html', label: 'Piramide', key: 'practice' },
+        { href: 'aritmetica.html', label: 'Aritmetică', key: 'aritmetica' },
         { href: 'history.html', label: 'Istoric', key: 'history' },
       ];
   topbar.innerHTML = `
