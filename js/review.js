@@ -84,8 +84,30 @@ export function renderReviewTable(problem, answers) {
 // `answers` looks like [{text, parsed}, ...]
 export function renderArithmeticTable(problem, answers) {
   const wrapper = document.createElement('div');
-  wrapper.style.overflowX = 'auto';
 
+  // Settings card (shown prominently at top of the review)
+  const s = problem.settings;
+  if (s) {
+    const opsLabel = (s.ops || []).map((o) => ({ '+': '+', '-': '−', '*': '×', '/': ':' })[o]).join(' ');
+    const parenLabel = { none: 'fără', round: '( )', mixed: '( ) și [ ]' }[s.parenStyle] || s.parenStyle;
+    const negLabel = s.allowNeg ? 'permise' : 'nu';
+    const card = document.createElement('div');
+    card.className = 'settings-summary';
+    card.innerHTML = `
+      <div class="settings-summary-title">Setările folosite la generarea exercițiilor</div>
+      <div class="settings-summary-grid">
+        <div><span class="muted">Operații</span><strong>${escapeHtml(opsLabel)}</strong></div>
+        <div><span class="muted">Paranteze</span><strong>${escapeHtml(parenLabel)}</strong></div>
+        <div><span class="muted">Operații / exercițiu</span><strong>${s.complexity}</strong></div>
+        <div><span class="muted">Numere până la</span><strong>${s.maxNum}</strong></div>
+        <div><span class="muted">Numere negative</span><strong>${escapeHtml(negLabel)}</strong></div>
+      </div>`;
+    wrapper.appendChild(card);
+  }
+
+  const tableWrap = document.createElement('div');
+  tableWrap.style.overflowX = 'auto';
+  wrapper.appendChild(tableWrap);
   const table = document.createElement('table');
   table.className = 'problem-table arith-table';
 
@@ -115,21 +137,7 @@ export function renderArithmeticTable(problem, answers) {
   });
   html += '</tbody>';
   table.innerHTML = html;
-  wrapper.appendChild(table);
-
-  // Optional: small footer with the settings used
-  const s = problem.settings;
-  if (s) {
-    const opsLabel = (s.ops || []).map((o) => ({ '+': '+', '-': '−', '*': '×', '/': ':' })[o]).join(' ');
-    const parenLabel = { none: 'fără paranteze', round: 'cu ( )', mixed: 'cu ( ) și [ ]' }[s.parenStyle] || s.parenStyle;
-    const negLabel = s.allowNeg ? 'cu negative' : 'fără negative';
-    const footer = document.createElement('div');
-    footer.className = 'muted';
-    footer.style.cssText = 'margin-top:8px;font-size:12px';
-    footer.textContent =
-      `Setări: ${opsLabel} · ${s.complexity} operații per exercițiu · numere până la ${s.maxNum} · ${parenLabel} · ${negLabel}`;
-    wrapper.appendChild(footer);
-  }
+  tableWrap.appendChild(table);
 
   return wrapper;
 }

@@ -374,6 +374,31 @@ label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
   vertical-align: middle;
 }
 
+/* Settings summary (shown to teacher/student in submission review) -------- */
+.settings-summary {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.settings-summary-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.settings-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px 16px;
+  font-size: 14px;
+}
+.settings-summary-grid > div { display: flex; flex-direction: column; }
+.settings-summary-grid .muted { font-size: 11px; }
+
 /* Arithmetic module ------------------------------------------------------- */
 .settings-grid {
   display: grid;
