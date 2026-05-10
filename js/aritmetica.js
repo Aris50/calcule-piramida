@@ -129,7 +129,7 @@ function render() {
         <td class="num-col">${i + 1}.</td>
         <td class="expr-col">${escapeHtml(ex.expr)} =</td>
         <td class="answer-col">
-          <input type="text" inputmode="numeric" data-row="${i}"
+          <input type="text" inputmode="text" pattern="-?\d+" data-row="${i}"
                  value="${escapeAttr(st.text)}" autocomplete="off" spellcheck="false" />
         </td>
       </tr>`;
